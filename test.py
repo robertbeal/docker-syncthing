@@ -26,7 +26,7 @@ def test_process(host):
     assert host.file('/proc/1/cmdline').content_string.replace('\x00','') == '/app/syncthing-home=/config-no-browser'
 
 def test_version(host):
-    assert os.environ.get('VERSION','0.14.53') in host.check_output("/app/syncthing --version")
+    assert os.environ.get('VERSION','1.0.0') in host.check_output("/app/syncthing --version")
 
 def test_user(host):
     user = 'syncthing'
