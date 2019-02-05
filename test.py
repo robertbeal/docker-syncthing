@@ -15,7 +15,7 @@ def host(request):
 
 def test_system(host):
     assert host.system_info.distribution == 'alpine'
-    assert host.system_info.release.startswith('3.8')
+    assert host.system_info.release.startswith('3.9')
 
 def test_entrypoint(host):
     entrypoint = '/usr/local/bin/entrypoint.sh'
@@ -26,7 +26,7 @@ def test_process(host):
     assert host.file('/proc/1/cmdline').content_string.replace('\x00','') == '/app/syncthing-home=/config-no-browser'
 
 def test_version(host):
-    assert os.environ.get('VERSION','1.0.0') in host.check_output("/app/syncthing --version")
+    assert os.environ.get('VERSION','1.0.1') in host.check_output("/app/syncthing --version")
 
 def test_user(host):
     user = 'syncthing'
