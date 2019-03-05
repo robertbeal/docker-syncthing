@@ -113,6 +113,7 @@ docker run \
 To run the container tests, run the following:
 
 ```bash
+pip install --user --upgrade pip pipenv
 pipenv install -d
 pipenv run pytest -v
 ```

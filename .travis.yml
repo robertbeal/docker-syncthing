@@ -13,6 +13,7 @@ env:
     - ARCH=arm64 FILE=arm64
 
 install:
+  - pip install --user --upgrade pip pipenv
   - pipenv install -d
 
 before_script:
