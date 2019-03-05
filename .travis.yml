@@ -1,11 +1,11 @@
 services: docker
 language: python
 python:
-  - '3.6'
+  - "3.6"
 
 env:
   global:
-    - VERSION=1.0.1
+    - VERSION=1.1.0
   matrix:
     - ARCH=i386 FILE=386
     - ARCH=amd64 FILE=amd64
@@ -13,14 +13,14 @@ env:
     - ARCH=arm64 FILE=arm64
 
 install:
-  - pip install -r requirements-test.txt
+  - pipenv install -d
 
 before_script:
   - ./build.sh $ARCH
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
-  - pytest -v test.py
+  - pipenv run pytest -v
   - docker build -t robertbeal/syncthing:$ARCH -t robertbeal/syncthing:$ARCH.$VERSION --build-arg=VERSION=$VERSION --build-arg=ARCH=$FILE --file Dockerfile.$ARCH .
   - docker run -d --name=syncthing-$ARCH --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:$ARCH
   - if [[ -z 'docker ps --filter="name=syncthing-$ARCH" --filter="health=healthy" -q' ]]; then exit 1; fi

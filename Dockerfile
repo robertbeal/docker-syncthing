@@ -1,7 +1,7 @@
 FROM alpine:3.9
 LABEL maintainer="github.com/robertbeal"
 
-ARG VERSION=1.0.1
+ARG VERSION=1.1.0
 ARG ARCH=amd64
 ARG UID=770
 ARG GID=770
@@ -11,9 +11,9 @@ WORKDIR /tmp
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
     && apk add --no-cache \
-        curl \
-        shadow \
-        su-exec \
+    curl \
+    shadow \
+    su-exec \
     && curl -L https://github.com/syncthing/syncthing/releases/download/v$VERSION/syncthing-linux-$ARCH-v$VERSION.tar.gz | tar zx \
     && mkdir /app \
     && mv syncthing-linux-$ARCH-v$VERSION/syncthing /app \
