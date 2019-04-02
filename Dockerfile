@@ -1,7 +1,7 @@
 FROM alpine:3.9
 LABEL maintainer="github.com/robertbeal"
 
-ARG VERSION=1.1.0
+ARG VERSION=1.1.1
 ARG ARCH=amd64
 ARG UID=770
 ARG GID=770
