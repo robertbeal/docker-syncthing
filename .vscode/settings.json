@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/Users/robbeal/.local/share/virtualenvs/docker-syncthing-Ns63U5Gz/bin/python"
+    "python.pythonPath": "/usr/local/bin/python3",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

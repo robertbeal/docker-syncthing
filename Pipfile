@@ -8,6 +8,7 @@ name = "pypi"
 [dev-packages]
 pytest = "*"
 testinfra = "*"
+pylint = "*"
 
 [requires]
 python_version = "3"
