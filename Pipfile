@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-more-itertools = "*"
 pylint = "*"
 pytest = "*"
 testinfra = "*"
