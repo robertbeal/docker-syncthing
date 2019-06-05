@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+more-itertools = "*"
+pylint = "*"
 pytest = "*"
 testinfra = "*"
-pylint = "*"
 
 [requires]
 python_version = "3.6"
