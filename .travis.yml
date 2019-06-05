@@ -10,17 +10,19 @@ env:
     - ARCH=i386 FILE=386
     - ARCH=amd64 FILE=amd64
     - ARCH=arm FILE=arm
-    - ARCH=arm64 FILE=arm64
+    - ARCH=aarch64 FILE=arm64
 
 install:
   - pip install --upgrade pip pipenv
-  - pipenv install -d
+  - pipenv sync --dev
 
 before_script:
   - ./build.sh $ARCH
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
+  - export PIPENV_IGNORE_VIRTUALENVS=1
+  - pipenv check
   - pipenv run pytest -v
   - docker build -t robertbeal/syncthing:$ARCH -t robertbeal/syncthing:$ARCH.$VERSION --build-arg=VERSION=$VERSION --build-arg=ARCH=$FILE --file Dockerfile.$ARCH .
   - docker run -d --name=syncthing-$ARCH --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:$ARCH
