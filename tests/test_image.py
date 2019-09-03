@@ -18,7 +18,7 @@ def host(request):
 
 def test_system(host):
     assert host.system_info.distribution == 'alpine'
-    assert host.system_info.release.startswith('3.9')
+    assert host.system_info.release.startswith('3.')
 
 
 def test_entrypoint(host):
@@ -33,7 +33,7 @@ def test_process(host):
 
 
 def test_version(host):
-    assert os.environ.get('VERSION', '1.2.0') in host.check_output(
+    assert os.environ.get('VERSION', '1.2.2') in host.check_output(
         "/app/syncthing --version")
 
 
