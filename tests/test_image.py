@@ -33,7 +33,7 @@ def test_process(host):
 
 
 def test_version(host):
-    assert os.environ.get('VERSION', '1.2.2') in host.check_output(
+    assert os.environ.get('VERSION', '1.3.0') in host.check_output(
         "/app/syncthing --version")
 
 
