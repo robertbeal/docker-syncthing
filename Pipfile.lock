@@ -84,11 +84,11 @@
         },
         "testinfra": {
             "hashes": [
-                "sha256:17dab41f56794389f45cb58de538d7a7390c88529013ee8b08d7311cef4baef3",
-                "sha256:58a73ca24e889680ce39d6964f39cebc8363fa68bb9c125ee4a182909ca6fe95"
+                "sha256:4124cc6c3b3db24b45d2c8b9642e318cc7aa05f790cc9a959654980931638877",
+                "sha256:55006d192eec38269ef28b6cecbd2a3d893e2474db4793e99b36736be290ca42"
             ],
             "index": "pypi",
-            "version": "==4.0.0"
+            "version": "==4.1.0"
         },
         "wcwidth": {
             "hashes": [
@@ -99,10 +99,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:ccc94ed0909b58ffe34430ea5451f07bc0c76467d7081619a454bf5c98b89e28",
-                "sha256:feae2f18633c32fc71f2de629bfb3bd3c9325cd4419642b1f1da42ee488d9b98"
+                "sha256:12248a63bbdf7548f89cb4c7cda4681e537031eda29c02ea29674bc6854460c2",
+                "sha256:7c0f8e91abc0dc07a5068f315c52cb30c66bfbc581e5b50704c8a2f6ebae794a"
             ],
-            "version": "==2.1.0"
+            "version": "==3.0.0"
         }
     }
 }
