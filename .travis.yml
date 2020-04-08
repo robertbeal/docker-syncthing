@@ -11,6 +11,7 @@ env:
     - ARCH=aarch64 FILE=arm64
 
 install:
+  - sudo apt-get install -y jq curl
   - pip install --upgrade pip pipenv
   - pipenv sync --dev
 
@@ -37,7 +38,7 @@ script:
       --health-interval=5s \
       --health-retries=3 \
       robertbeal/syncthing:$ARCH
-      
+
   if [[ -z 'docker ps --filter="name=syncthing-$ARCH" --filter="health=healthy" -q' ]]; then exit 1; fi
 
 deploy:
