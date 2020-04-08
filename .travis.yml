@@ -21,7 +21,7 @@ before_script:
 
 script:
   - export VERSION="$(curl --silent "https://api.github.com/repos/syncthing/syncthing/releases/latest" | jq -r '.tag_name')"
-  - PIPENV_IGNORE_VIRTUALENVS=1; pipenv run pytest -v
+  - export PIPENV_IGNORE_VIRTUALENVS=1; pipenv run pytest -v
   
   - docker build -t robertbeal/syncthing:$ARCH -t robertbeal/syncthing:$ARCH.$VERSION --build-arg=VERSION=$VERSION --build-arg=VSC_REF=$(git rev-parse --short HEAD) --build-arg=ARCH=$FILE --file Dockerfile.$ARCH .
   - docker run -d --name=syncthing-$ARCH --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:$ARCH
