@@ -27,7 +27,6 @@ script:
     -t robertbeal/syncthing:$ARCH \
     -t robertbeal/syncthing:$ARCH.$VERSION \
     --build-arg=VERSION=$VERSION \
-    --build-arg=VSC_REF=$(git rev-parse --short HEAD) \
     --build-arg=ARCH=$FILE \
     --file Dockerfile.$ARCH .
   
