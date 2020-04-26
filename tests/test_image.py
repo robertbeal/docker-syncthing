@@ -3,11 +3,9 @@ import pytest
 import subprocess
 import testinfra
 
-VERSION = os.environ.get('VERSION', '')
-
 @pytest.fixture(scope='session')
 def host(request):
-    subprocess.check_call(["docker", "build", f"--build-arg=VERSION={VERSION}", "-t", "image-under-test", "."])
+    subprocess.check_call(["docker", "build", f"--build-arg=VERSION=v1.4.2", "-t", "image-under-test", "."])
     docker_id = subprocess.check_output(
         ['docker', 'run', '--rm', '-d', 'image-under-test']).decode().strip()
 
@@ -22,18 +20,14 @@ def test_system(host):
 
 
 def test_entrypoint(host):
-    entrypoint = '/usr/local/bin/entrypoint.sh'
-    assert host.file(entrypoint).exists
-    assert oct(host.file(entrypoint).mode) == '0o555'
-
-
-def test_process(host):
-    assert host.file('/proc/1/cmdline').content_string.replace('\x00',
-                                                               '') == '/app/syncthing-home=/config-no-browser'
+    file = '/usr/local/bin/entrypoint.sh'
+    assert host.file(file).exists
+    assert host.file(file).user == 'syncthing'
+    assert host.file(file).group == 'syncthing'
 
 
 def test_version(host):
-    assert VERSION in host.check_output("/app/syncthing --version")
+    assert "v1.4.2" in host.check_output("/usr/local/bin/syncthing --version")
 
 
 def test_user(host):
@@ -47,12 +41,11 @@ def test_user_is_locked(host):
     assert 'syncthing L ' in host.check_output('passwd --status syncthing')
 
 
-def test_app_folder(host):
-    folder = '/app'
-    assert host.file(folder).exists
-    assert host.file(folder).user == 'syncthing'
-    assert host.file(folder).group == 'syncthing'
-    assert oct(host.file(folder).mode) == '0o550'
+def test_app(host):
+    file = "/usr/local/bin/syncthing"
+    assert host.file(file).exists
+    assert host.file(file).user == 'syncthing'
+    assert host.file(file).group == 'syncthing'
 
 
 def test_upgrades_are_disabled(host):

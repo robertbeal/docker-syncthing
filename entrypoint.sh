@@ -11,7 +11,7 @@ fi
 
 if [ "$(id -u)" = '0' ]; then
     chown -R syncthing /config
-    exec su-exec syncthing /app/syncthing "$@"
+    exec su-exec syncthing /usr/local/bin/syncthing "$@"
 fi
 
-exec /app/syncthing "$@"
+exec /usr/local/bin/syncthing "$@"
