@@ -4,17 +4,18 @@ python:
   - "3.8"
 services: docker
 
-addons:
-  apt:
-    packages:
-      - docker-ce
-
 env:
   matrix:
     - ARCH=i386 FILE=386
     - ARCH=amd64 FILE=amd64
     - ARCH=arm FILE=arm
     - ARCH=aarch64 FILE=arm64
+
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
 
 install:
   - sudo apt-get install -y jq curl
