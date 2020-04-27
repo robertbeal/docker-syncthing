@@ -1,7 +1,7 @@
-dist: bionic
+services: docker
 language: python
 python:
-  - "3.8"
+  - "3.6"
 
 env:
   matrix:
@@ -10,14 +10,7 @@ env:
     - ARCH=arm FILE=arm
     - ARCH=aarch64 FILE=arm64
 
-before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y install docker-ce
-
 install:
-  - sudo apt-get install -y curl jq
   - pip install --upgrade pip pipenv
   - pipenv sync --dev
 
@@ -26,13 +19,26 @@ before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
-  - export VERSION="$(curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name')"
-  - pipenv run pytest -v
-
-  - docker build -t robertbeal/syncthing:$ARCH -t robertbeal/syncthing:$ARCH.$VERSION --build-arg=VERSION=$VERSION --build-arg=VSC_REF=$(git rev-parse --short HEAD) --build-arg=ARCH=$FILE --file Dockerfile.$ARCH .
-  - docker run -d --name=syncthing-$ARCH --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:$ARCH
-
-  - if [[ -z 'docker ps --filter="name=syncthing-$ARCH" --filter="health=healthy" -q' ]]; then exit 1; fi
+  export VERSION=$(curl --silent "https://api.github.com/repos/syncthing/syncthing/releases/latest" | jq -r .tag_name)
+  pipenv run pytest -v
+  
+  docker build \
+    -t robertbeal/syncthing:$ARCH \
+    -t robertbeal/syncthing:$ARCH.$VERSION \
+    --build-arg=VERSION=$VERSION \
+    --build-arg=VSC_REF=$(git rev-parse --short HEAD) \
+    --build-arg=ARCH=$FILE \
+    --file Dockerfile.$ARCH .
+  
+    docker run \
+      -d \
+      --name=syncthing-$ARCH \
+      --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" \
+      --health-interval=5s \
+      --health-retries=3 \
+      robertbeal/syncthing:$ARCH
+      
+  if [[ -z 'docker ps --filter="name=syncthing-$ARCH" --filter="health=healthy" -q' ]]; then exit 1; fi
 
 deploy:
   provider: script
