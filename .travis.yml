@@ -3,6 +3,11 @@ language: python
 python:
   - "3.6"
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 env:
   matrix:
     - ARCH=i386 FILE=386
