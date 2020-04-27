@@ -3,11 +3,10 @@ import pytest
 import subprocess
 import testinfra
 
-VERSION = os.environ.get('VERSION', '')
 
 @pytest.fixture(scope='session')
 def host(request):
-    subprocess.check_call(["docker", "build", f"--build-arg=VERSION={VERSION}", "-t", "image-under-test", "."])
+    subprocess.check_call(['docker', 'build', '-t', 'image-under-test', '.'])
     docker_id = subprocess.check_output(
         ['docker', 'run', '--rm', '-d', 'image-under-test']).decode().strip()
 
@@ -19,6 +18,7 @@ def host(request):
 
 def test_system(host):
     assert host.system_info.distribution == 'alpine'
+    assert host.system_info.release.startswith('3.')
 
 
 def test_entrypoint(host):
@@ -33,7 +33,8 @@ def test_process(host):
 
 
 def test_version(host):
-    assert VERSION in host.check_output("/app/syncthing --version")
+    assert os.environ.get('VERSION', '1.4.0') in host.check_output(
+        "/app/syncthing --version")
 
 
 def test_user(host):
