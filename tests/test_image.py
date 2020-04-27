@@ -22,19 +22,20 @@ def test_system(host):
 
 
 def test_entrypoint(host):
-    entrypoint = '/usr/local/bin/entrypoint.sh'
-    assert host.file(entrypoint).exists
-    assert oct(host.file(entrypoint).mode) == '0o555'
+    file = '/usr/local/bin/entrypoint.sh'
+    assert host.file(file).exists
+    assert host.file(file).user == 'syncthing'
+    assert host.file(file).group == 'syncthing'
+    assert oct(host.file(file).mode) == '0o550'
 
 
 def test_process(host):
     assert host.file('/proc/1/cmdline').content_string.replace('\x00',
-                                                               '') == '/app/syncthing-home=/config-no-browser'
+                                                               '') == '/usr/local/bin/syncthing-home=/config-no-browser'
 
 
 def test_version(host):
-    assert os.environ.get('VERSION', '1.4.0') in host.check_output(
-        "/app/syncthing --version")
+    assert os.environ.get('VERSION') in host.check_output("syncthing --version")
 
 
 def test_user(host):
@@ -48,12 +49,12 @@ def test_user_is_locked(host):
     assert 'syncthing L ' in host.check_output('passwd --status syncthing')
 
 
-def test_app_folder(host):
-    folder = '/app'
-    assert host.file(folder).exists
-    assert host.file(folder).user == 'syncthing'
-    assert host.file(folder).group == 'syncthing'
-    assert oct(host.file(folder).mode) == '0o550'
+def test_app(host):
+    file = '/usr/local/bin/syncthing'
+    assert host.file(file).exists
+    assert host.file(file).user == 'syncthing'
+    assert host.file(file).group == 'syncthing'
+    assert oct(host.file(file).mode) == '0o550'
 
 
 def test_upgrades_are_disabled(host):
