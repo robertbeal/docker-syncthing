@@ -34,10 +34,6 @@ def test_process(host):
                                                                '') == '/usr/local/bin/syncthing-home=/config-no-browser'
 
 
-def test_version(host):
-    assert os.environ.get('VERSION') in host.check_output("syncthing --version")
-
-
 def test_user(host):
     user = 'syncthing'
     assert host.user(user).uid == 770
