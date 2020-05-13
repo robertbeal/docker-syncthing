@@ -8,7 +8,6 @@ env:
     - ARCH=i386 FILE=386
     - ARCH=amd64 FILE=amd64
     - ARCH=arm FILE=arm
-    - ARCH=aarch64 FILE=arm64
 
 install:
   - pip install --upgrade pip pipenv
