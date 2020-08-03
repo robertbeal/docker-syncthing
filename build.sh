@@ -10,17 +10,16 @@ version="$2"
 
 case "$arch" in
 amd64) base_image="balenalib/amd64-alpine:latest" ;;
-i386) base_image="balenalib/i386-alpine:latest" ;;
+386) base_image="balenalib/i386-alpine:latest" ;;
 arm) base_image="balenalib/armv7hf-alpine:latest" ;;
-aarch64) base_image="balenalib/aarch64-alpine:latest" ;;
 esac
 
 sed "1cFROM $base_image" Dockerfile >"Dockerfile.$arch"
 
 docker build \
-    -t robertbeal/syncthing:"$arch" \
-    -t robertbeal/syncthing:"$arch"."$version" \
+    -t "robertbeal/syncthing:$arch" \
+    -t "robertbeal/syncthing:$arch.$version" \
     --build-arg=COMMIT_ID="$TRAVIS_COMMIT "\
     --build-arg=VERSION="$version" \
-    --build-arg=ARCH="$arch" \
-    --file Dockerfile."$arch" .
+    --build-arg="ARCH=$arch" \
+    --file "Dockerfile.$arch" .
