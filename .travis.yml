@@ -5,23 +5,21 @@ python:
 
 env:
   matrix:
-    - ARCH=i386 FILE=386
-    - ARCH=amd64 FILE=amd64
-    - ARCH=arm FILE=arm
+    - ARCH=386
+    - ARCH=amd64
+    - ARCH=arm
 
 install:
   - pip install --upgrade pip pipenv
   - pipenv sync --dev
 
 before_script:
-  - ./build.sh $ARCH
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-
+  - 
 script:
   - export VERSION="$(curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name')"
-  - pipenv run pytest -v
+  - ./build.sh $ARCH $VERSION
 
-  - docker build -t robertbeal/syncthing:$ARCH -t robertbeal/syncthing:$ARCH.$VERSION --build-arg=VERSION=$VERSION --build-arg=ARCH=$FILE --file Dockerfile.$ARCH .
+  - pipenv run pytest -v
   - docker run -d --name=syncthing-$ARCH --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:$ARCH
   - if [[ -z 'docker ps --filter="name=syncthing-$ARCH" --filter="health=healthy" -q' ]]; then exit 1; fi
 
