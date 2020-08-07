@@ -13,8 +13,6 @@ install:
   - pip install --upgrade pip pipenv
   - pipenv sync --dev
 
-before_script:
-  - 
 script:
   - export VERSION="$(curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name')"
   - ./build.sh $ARCH $VERSION
@@ -29,5 +27,7 @@ deploy:
     echo "$DOCKER_PWD" | docker login -u "$DOCKER_USER" --password-stdin &&
     docker push robertbeal/syncthing:$ARCH &&
     docker push robertbeal/syncthing:$ARCH.$VERSION;
+    docker manifest push "robertbeal/syncthing:$ARCH"
+
   on:
     branch: master

@@ -26,3 +26,14 @@ docker build \
     --build-arg=VERSION="$version" \
     --build-arg="ARCH=$arch" \
     --file "Dockerfile.$arch" .
+
+export DOCKER_CLI_EXPERIMENTAL=enabled
+
+docker manifest create \
+    "robertbeal/syncthing:$arch" \
+    "robertbeal/syncthing:$arch.$version" 
+
+docker manifest annotate \
+    "robertbeal/syncthing:$arch" \
+    "robertbeal/syncthing:$arch.$version"  \
+    --arch "$arch"
