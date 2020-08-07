@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.12.0
 
 ARG VERSION=v1.4.2
 ARG ARCH=amd64
