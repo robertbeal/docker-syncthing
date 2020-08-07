@@ -7,13 +7,11 @@ import testinfra
 @pytest.fixture(scope='session')
 def host(request):
     subprocess.check_call(['docker', 'build', '-t', 'image-under-test', '.'])
-    docker_id = subprocess.check_output(
-        ['docker', 'run', '--rm', '-d', 'image-under-test']).decode().strip()
+    container = subprocess.check_output( ['docker', 'run', '--rm', '-d', 'image-under-test']).decode().strip()
 
-    yield testinfra.get_host("docker://" + docker_id)
+    yield testinfra.get_host("docker://" + container)
 
-    # teardown
-    subprocess.check_call(['docker', 'rm', '-f', docker_id])
+    subprocess.check_call(['docker', 'rm', '-f', container])
 
 
 def test_system(host):

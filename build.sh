@@ -14,6 +14,9 @@ amd64) base_image="balenalib/amd64-alpine:latest" ;;
 arm) base_image="balenalib/armv7hf-alpine:latest" ;;
 esac
 
+echo "Building...."
+echo "Syncthing: $version ($arch)"
+
 sed "1cFROM $base_image" Dockerfile >"Dockerfile.$arch"
 
 docker build \
