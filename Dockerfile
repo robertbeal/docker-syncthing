@@ -2,9 +2,6 @@ ARG VERSION=v1.4.2
 
 FROM alpine:3.12 as builder
 
-# build variables
-ARG SYNCTHING_RELEASE
-
 RUN \
  echo "**** install build packages ****" && \
  apk add --no-cache \
@@ -17,7 +14,7 @@ RUN \
 
 WORKDIR /tmp
 
-RUN curl -o /tmp/syncthing-src.tar.gz -L "https://github.com/syncthing/syncthing/archive/${SYNCTHING_RELEASE}.tar.gz" && \
+RUN curl -o /tmp/syncthing-src.tar.gz -L "https://github.com/syncthing/syncthing/archive/${VERSION}.tar.gz" && \
  tar xf /tmp/syncthing-src.tar.gz -C /tmp/src --strip-components=1 && \
  cd /tmp/src && \
  rm -f go.sum && \
