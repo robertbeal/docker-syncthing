@@ -29,10 +29,11 @@ jobs:
             --tag robertbeal/syncthing:latest \
             --tag robertbeal/syncthing:$(cat version) \
             --platform linux/amd64,linux/arm/v7,linux/arm64 .
-      - name: test dependencies
+      - name: python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: test dependencies
         run: |
             pip install --upgrade pip pipenv
             pipenv sync --dev
