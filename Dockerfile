@@ -1,10 +1,8 @@
-ARG VERSION=v1.4.2
-
 FROM alpine:3.12 as builder
 
-RUN \
- echo "**** install build packages ****" && \
- apk add --no-cache \
+ARG VERSION=v1.8.0
+
+RUN apk add --no-cache \
 	curl \
 	g++ \
 	gcc \
@@ -14,9 +12,8 @@ RUN \
 
 WORKDIR /tmp
 
-RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
-RUN tar xf /tmp/src.tar.gz -C /tmp/src --strip-components=1
-RUN cd /tmp/src
+RUN curl -o ./src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
+RUN tar xf ./src.tar.gz --strip-components=1
 RUN rm -f go.sum
 RUN go clean -modcache
 RUN CGO_ENABLED=0 go run build.go \
@@ -24,11 +21,11 @@ RUN CGO_ENABLED=0 go run build.go \
 	-version=$VERSION \
 	build syncthing
 
+FROM alpine:3.12
+
 ARG COMMIT_ID
 ARG UID=770
 ARG GID=770
-
-FROM alpine:3.12
 
 LABEL maintainer="github.com/robertbeal" \
       org.label-schema.name="Syncthing" \
@@ -44,7 +41,7 @@ WORKDIR /tmp
 # disable upgrades
 ENV STNOUPGRADE=1
 
-COPY --from=builder /tmp/src/syncthing /usr/bin/
+COPY --from=builder /tmp/syncthing /usr/bin/
 COPY entrypoint.sh /usr/local/bin
 
 RUN addgroup -g $GID syncthing \
