@@ -12,6 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Architecture ${{ matrix.arch }} 
+    
     strategy: 
       matrix:
         arch: ["386", "amd64", "arm"] 
@@ -22,15 +23,19 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: variables
+        run: |
+            pip install --upgrade pip pipenv
+            pipenv sync --dev
+            curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
       - name: dependencies
         run: |
             pip install --upgrade pip pipenv
             pipenv sync --dev
-            export VERSION="$(curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name')"
       - name: build
         run: |
-          ./build.sh ${{ matrix.arch }} $VERSION
-      - name: Test
+          ./build.sh ${{ matrix.arch }} $(cat version)
+      - name: test
         run: |
           pipenv run pytest -v
           docker run -d --name=syncthing-${{ matrix.python-version }} --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:${{ matrix.python-version }}
