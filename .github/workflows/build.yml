@@ -11,18 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Architecture ${{ matrix.arch }} 
-
-    strategy: 
-      matrix:
-        arch: ["386", "amd64", "arm"] 
+    name: Syncthing
 
     steps:
       - uses: actions/checkout@v2
-      - name: python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
       - name: variables
         run: |
             curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
@@ -33,10 +25,14 @@ jobs:
       - name: build
         run: |
           docker buildx build \
+            --push \
             --tag robertbeal/syncthing:latest \
             --tag robertbeal/syncthing:$(cat version) \
-            --platform linux/amd64,linux/arm/v7,linux/arm64
+            --platform linux/amd64,linux/arm/v7,linux/arm64 .
       - name: test dependencies
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
         run: |
             pip install --upgrade pip pipenv
             pipenv sync --dev
