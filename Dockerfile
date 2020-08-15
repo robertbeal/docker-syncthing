@@ -14,8 +14,8 @@ RUN \
 
 WORKDIR /tmp
 
-RUN curl -o /tmp/syncthing-src.tar.gz -L "https://github.com/syncthing/syncthing/archive/${VERSION}.tar.gz" && \
- tar xf /tmp/syncthing-src.tar.gz -C /tmp/src --strip-components=1 && \
+RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz" && \
+ tar xf /tmp/src.tar.gz -C /tmp/src --strip-components=1 && \
  cd /tmp/src && \
  rm -f go.sum && \
  go clean -modcache && \
