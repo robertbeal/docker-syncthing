@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Architecture ${{ matrix.arch }} 
-    
+
     strategy: 
       matrix:
         arch: ["386", "amd64", "arm"] 
@@ -25,16 +25,21 @@ jobs:
           python-version: 3.8
       - name: variables
         run: |
-            pip install --upgrade pip pipenv
-            pipenv sync --dev
             curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
-      - name: dependencies
-        run: |
-            pip install --upgrade pip pipenv
-            pipenv sync --dev
+      - name: build dependencies
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
       - name: build
         run: |
-          ./build.sh ${{ matrix.arch }} $(cat version)
+          docker buildx build \
+            --tag robertbeal/syncthing:latest \
+            --tag robertbeal/syncthing:$(cat version) \
+            --platform linux/amd64,linux/arm/v7,linux/arm64
+      - name: test dependencies
+        run: |
+            pip install --upgrade pip pipenv
+            pipenv sync --dev
       - name: test
         run: |
           pipenv run pytest -v
