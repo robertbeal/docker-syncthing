@@ -14,12 +14,12 @@ RUN \
 
 WORKDIR /tmp
 
-RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz" && \
- tar xf /tmp/src.tar.gz -C /tmp/src --strip-components=1 && \
- cd /tmp/src && \
- rm -f go.sum && \
- go clean -modcache && \
- CGO_ENABLED=0 go run build.go \
+RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
+RUN tar xf /tmp/src.tar.gz -C /tmp/src --strip-components=1
+RUN cd /tmp/src
+RUN rm -f go.sum
+RUN go clean -modcache
+RUN CGO_ENABLED=0 go run build.go \
 	-no-upgrade \
 	-version=$VERSION \
 	build syncthing
