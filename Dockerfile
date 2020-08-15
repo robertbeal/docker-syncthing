@@ -1,10 +1,10 @@
-FROM alpine:3.11
-
 ARG VERSION=v1.4.2
-ARG ARCH=amd64
+ARG ARCH=
 ARG COMMIT_ID
 ARG UID=770
 ARG GID=770
+
+FROM alpine:3.11
 
 LABEL maintainer="github.com/robertbeal" \
       org.label-schema.name="Syncthing" \
