@@ -21,7 +21,7 @@ RUN CGO_ENABLED=0 go run build.go \
 	-version=$VERSION \
 	build syncthing
 
-COPY entrypoint.sh /usr/bin
+COPY entrypoint.sh /tmp
 
 FROM alpine:3.12
 
