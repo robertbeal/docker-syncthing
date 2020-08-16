@@ -110,7 +110,7 @@ docker run \
 
 ## Tests
 
-To run the container tests, run the following:
+To run the image tests, use the following:
 
 ```bash
 cd tests
