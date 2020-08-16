@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/robertbeal/docker-syncthing.svg?branch=master)](https://travis-ci.org/robertbeal/syncthing)
+[![Actions Status](https://github.com/robertbeal/docker-syncthing/workflows/build/badge.svg)](https://github.com/robertbeal/docker-syncthing/actions)
 [![](https://images.microbadger.com/badges/image/robertbeal/syncthing.svg)](https://microbadger.com/images/robertbeal/syncthing "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/robertbeal/syncthing.svg)](https://microbadger.com/images/robertbeal/syncthing "Get your own version badge on microbadger.com")
 [![](https://img.shields.io/docker/pulls/robertbeal/syncthing.svg)](https://hub.docker.com/r/robertbeal/syncthing/)
