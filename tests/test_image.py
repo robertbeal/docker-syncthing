@@ -20,7 +20,7 @@ def test_system(host):
 
 
 def test_entrypoint(host):
-    file = '/usr/local/bin/entrypoint.sh'
+    file = '/usr/bin/entrypoint.sh'
     assert host.file(file).exists
     assert host.file(file).user == 'syncthing'
     assert host.file(file).group == 'syncthing'

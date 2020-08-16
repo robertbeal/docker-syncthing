@@ -1,6 +1,9 @@
-FROM alpine:3.12 as builder
-
 ARG VERSION=v1.8.0
+ARG COMMIT_ID
+ARG UID=770
+ARG GID=770
+
+FROM alpine:3.12 as builder
 
 RUN apk add --no-cache \
 	curl \
@@ -21,11 +24,9 @@ RUN CGO_ENABLED=0 go run build.go \
 	-version=$VERSION \
 	build syncthing
 
-FROM alpine:3.12
+COPY entrypoint.sh /usr/bin
 
-ARG COMMIT_ID
-ARG UID=770
-ARG GID=770
+FROM alpine:3.12
 
 LABEL maintainer="github.com/robertbeal" \
       org.label-schema.name="Syncthing" \
@@ -42,7 +43,6 @@ WORKDIR /tmp
 ENV STNOUPGRADE=1
 
 COPY --from=builder /tmp/syncthing /usr/bin/
-COPY entrypoint.sh /usr/local/bin
 
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
@@ -50,13 +50,13 @@ RUN addgroup -g $GID syncthing \
     curl \
     shadow \
     su-exec \
-    && chown -R syncthing:syncthing /usr/bin/syncthing /usr/local/bin/entrypoint.sh \
-    && chmod 550 -R /usr/bin/syncthing /usr/local/bin/entrypoint.sh \
+    && chown -R syncthing:syncthing /usr/bin/syncthing /usr/bin/entrypoint.sh \
+    && chmod 550 -R /usr/bin/syncthing /usr/bin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/*
 
 HEALTHCHECK --interval=30s --retries=3 CMD curl --fail -H \"X-API-Key: $(cat /root/.syncthing)\" http://127.0.0.1:8384/rest/system/ping || exit 1
 VOLUME /config /data
 EXPOSE 8384 22000 21027/UDP
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["-home=/config", "-no-browser"]
