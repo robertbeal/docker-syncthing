@@ -44,7 +44,7 @@ WORKDIR /tmp
 # disable upgrades
 ENV STNOUPGRADE=1
 
-COPY --from=builder /tmp/syncthing /usr/bin/
+COPY --from=builder /tmp/syncthing /tmp/entrypoint.sh /usr/bin/
 
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
