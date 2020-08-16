@@ -17,13 +17,32 @@ jobs:
       - uses: actions/checkout@v2
       - name: variables
         run: |
-            curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
+           curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
+           
       - name: build dependencies
         uses: crazy-max/ghaction-docker-buildx@v1
         with:
           version: latest
+
+      - name: python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: test dependencies
+        run: |
+            pip install --upgrade pip pipenv
+            pipenv sync --dev
+
+      - name: test
+        run: |
+          pipenv run pytest -v
+          docker run -d --name=syncthing-${{ matrix.python-version }} --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:${{ matrix.python-version }}
+          if [[ -z 'docker ps --filter="name=syncthing-${{ matrix.python-version }}" --filter="health=healthy" -q' ]]; then exit 1; fi
+
       - name: docker hub login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
       - name: build
         run: |
           docker buildx build \
@@ -32,16 +51,4 @@ jobs:
             --tag robertbeal/syncthing:$(cat version) \
             --build-arg=VERSION="$(cat version)" \
             --platform linux/amd64,linux/arm/v7,linux/arm64 .
-      - name: python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: test dependencies
-        run: |
-            pip install --upgrade pip pipenv
-            pipenv sync --dev
-      - name: test
-        run: |
-          pipenv run pytest -v
-          docker run -d --name=syncthing-${{ matrix.python-version }} --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 robertbeal/syncthing:${{ matrix.python-version }}
-          if [[ -z 'docker ps --filter="name=syncthing-${{ matrix.python-version }}" --filter="health=healthy" -q' ]]; then exit 1; fi
+
