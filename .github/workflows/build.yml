@@ -3,6 +3,10 @@ name: build
 
 on:
   push:
+      paths-ignore:
+        - '**/*.md'
+        - '.gitignore'
+        - '.dependabot/**'
   schedule:
     - cron: '0 0 * * 0' # weekly
 
@@ -18,13 +22,11 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: test dependencies
-        run: |
-            pip install --upgrade pip pipenv
-            pipenv sync --dev
-
       - name: test
         run: |
+          cd tests
+          pip install --upgrade pip pipenv
+          pipenv sync --dev
           pipenv run pytest -v
           docker run -d --name=syncthing --health-cmd="curl --fail http://127.0.0.1:8384/rest/system/ping || exit 1" --health-interval=5s --health-retries=3 syncthing
           if [[ -z 'docker ps --filter="name=syncthing" --filter="health=healthy" -q' ]]; then exit 1; fi
