@@ -6,8 +6,8 @@ import testinfra
 
 @pytest.fixture(scope='session')
 def host(request):
-    subprocess.check_call(['docker', 'build', '-t', 'image-under-test', '.'])
-    container = subprocess.check_output( ['docker', 'run', '--rm', '-d', 'image-under-test']).decode().strip()
+    subprocess.check_call(['docker', 'build', '-t', 'syncthing', '.'])
+    container = subprocess.check_output( ['docker', 'run', '--rm', '-d', 'syncthing']).decode().strip()
 
     yield testinfra.get_host("docker://" + container)
 
@@ -29,7 +29,7 @@ def test_entrypoint(host):
 
 def test_process(host):
     assert host.file('/proc/1/cmdline').content_string.replace('\x00',
-                                                               '') == '/usr/local/bin/syncthing-home=/config-no-browser'
+                                                               '') == '/usr/bin/syncthing-home=/config-no-browser'
 
 
 def test_user(host):
@@ -44,7 +44,7 @@ def test_user_is_locked(host):
 
 
 def test_app(host):
-    file = '/usr/local/bin/syncthing'
+    file = '/usr/bin/syncthing'
     assert host.file(file).exists
     assert host.file(file).user == 'syncthing'
     assert host.file(file).group == 'syncthing'

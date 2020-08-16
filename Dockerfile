@@ -1,7 +1,28 @@
-FROM alpine:3.11
+FROM alpine:3.12 as builder
 
-ARG VERSION=v1.4.2
-ARG ARCH=amd64
+ARG VERSION=v1.8.0
+
+RUN apk add --no-cache \
+	curl \
+	g++ \
+	gcc \
+	git \
+	go \
+	tar
+
+WORKDIR /tmp
+
+RUN curl -o ./src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
+RUN tar xf ./src.tar.gz --strip-components=1
+RUN rm -f go.sum
+RUN go clean -modcache
+RUN CGO_ENABLED=0 go run build.go \
+	-no-upgrade \
+	-version=$VERSION \
+	build syncthing
+
+FROM alpine:3.12
+
 ARG COMMIT_ID
 ARG UID=770
 ARG GID=770
@@ -20,6 +41,7 @@ WORKDIR /tmp
 # disable upgrades
 ENV STNOUPGRADE=1
 
+COPY --from=builder /tmp/syncthing /usr/bin/
 COPY entrypoint.sh /usr/local/bin
 
 RUN addgroup -g $GID syncthing \
@@ -28,10 +50,8 @@ RUN addgroup -g $GID syncthing \
     curl \
     shadow \
     su-exec \
-    && curl -L https://github.com/syncthing/syncthing/releases/download/$VERSION/syncthing-linux-$ARCH-$VERSION.tar.gz | tar zx \
-    && mv syncthing-linux-$ARCH-$VERSION/syncthing /usr/local/bin \
-    && chown -R syncthing:syncthing /usr/local/bin/syncthing /usr/local/bin/entrypoint.sh \
-    && chmod 550 -R /usr/local/bin/syncthing /usr/local/bin/entrypoint.sh \
+    && chown -R syncthing:syncthing /usr/bin/syncthing /usr/local/bin/entrypoint.sh \
+    && chmod 550 -R /usr/bin/syncthing /usr/local/bin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/*
 
 HEALTHCHECK --interval=30s --retries=3 CMD curl --fail -H \"X-API-Key: $(cat /root/.syncthing)\" http://127.0.0.1:8384/rest/system/ping || exit 1
