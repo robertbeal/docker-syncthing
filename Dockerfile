@@ -1,9 +1,6 @@
-ARG VERSION=v1.8.0
-ARG COMMIT_ID
-ARG UID=770
-ARG GID=770
-
 FROM alpine:3.12 as builder
+
+ARG VERSION=v1.8.0
 
 RUN apk add --no-cache \
 	curl \
@@ -27,6 +24,11 @@ RUN CGO_ENABLED=0 go run build.go \
 COPY entrypoint.sh /usr/bin
 
 FROM alpine:3.12
+
+ARG VERSION
+ARG COMMIT_ID
+ARG UID=770
+ARG GID=770
 
 LABEL maintainer="github.com/robertbeal" \
       org.label-schema.name="Syncthing" \
