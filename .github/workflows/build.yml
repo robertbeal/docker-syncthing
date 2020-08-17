@@ -11,9 +11,16 @@ on:
     - cron: '0 0 * * 0' # weekly
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: lint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
+
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -33,9 +40,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [lint, test]
     if: github.ref == 'refs/heads/main'
-
     steps:
       - uses: actions/checkout@v2
 
