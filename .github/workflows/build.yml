@@ -41,12 +41,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: variables
         run: curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
 
       - name: build dependencies
-        uses: crazy-max/ghaction-docker-buildx@v1
+        uses: crazy-max/ghaction-docker-buildx@v2
         with:
           version: latest
 
