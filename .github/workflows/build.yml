@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: lint
         run: docker run --rm -i hadolint/hadolint < Dockerfile
 
@@ -23,12 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
       - name: test
         run: |
           cd tests
@@ -44,11 +41,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-
+      
       - name: variables
-        run: |
-           curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
-           
+        run: curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
+
       - name: build dependencies
         uses: crazy-max/ghaction-docker-buildx@v1
         with:
