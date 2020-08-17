@@ -2,6 +2,7 @@ FROM alpine:3.12 as builder
 
 ARG VERSION=v1.8.0
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
 	curl \
 	g++ \
@@ -46,6 +47,7 @@ ENV STNOUPGRADE=1
 
 COPY --from=builder /tmp/syncthing /tmp/entrypoint.sh /usr/bin/
 
+# hadolint ignore=DL3018
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
     && apk add --no-cache \
