@@ -7,7 +7,7 @@
 
 # Syncthing
 
-A production optimised version of Syncthing, able to run in `--read-only` mode and `su-exec` for managing the user is runs as.
+A production optimised version of Syncthing, able to run in `--read-only` mode and `su-exec` for managing the user is runs as. Supported architectures can be seen on [Docker Hub](https://hub.docker.com/repository/docker/robertbeal/syncthing). 
 
 ## Running in read-only mode
 
