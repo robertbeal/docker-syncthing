@@ -61,7 +61,7 @@ Runs using a user `syncthing:770`, so there are a number of options for running 
         robertbeal/syncthing
     ```
 
-1. Using `--user` but without a matching host UID/GID so could cause issues:
+1. Using `--user` but without a matching host UID/GID (so could cause issues):
 
     ```bash
     docker run \
