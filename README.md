@@ -15,77 +15,77 @@ Runs using a user `syncthing:770`, so there are a number of options for running 
 
 1. Create a host user with matching UID and run the container via that user:
 
-`sudo useradd --no-create-home --system --shell /bin/false --uid 770 foo`
+    ```bash
+    sudo useradd --no-create-home --system --shell /bin/false --uid 770 foo
 
-```bash
-docker run \
-    --name syncthing \
-    --init \
-    --user $(id foo -u):$(id foo -g) \
-    --rm \
-    --read-only \
-    --security-opt="no-new-privileges:true" \
-    --net=host \
-    --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
-    --health-interval=30s \
-    --health-retries=3 \
-    -v /home/syncthing/config:/config \
-    -v /home/syncthing/data:/data \
-    -p 127.0.0.1:8384:8384 \
-    -p 22000:22000 \
-    -p 21027:21027/udp \
-    robertbeal/syncthing
-```
+    docker run \
+        --name syncthing \
+        --init \
+        --user $(id foo -u):$(id foo -g) \
+        --rm \
+        --read-only \
+        --security-opt="no-new-privileges:true" \
+        --net=host \
+        --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
+        --health-interval=30s \
+        --health-retries=3 \
+        -v /home/syncthing/config:/config \
+        -v /home/syncthing/data:/data \
+        -p 127.0.0.1:8384:8384 \
+        -p 22000:22000 \
+        -p 21027:21027/udp \
+        robertbeal/syncthing
+    ```
 
 1. Mount `/etc/passwd` and create a host user with matching name:
 
-`sudo useradd --no-create-home --system --shell /bin/false syncthing`
+    ```bash
+    sudo useradd --no-create-home --system --shell /bin/false syncthing
 
-```bash
-docker run \
-    --name syncthing \
-    --init \
-    --rm \
-    --read-only \
-    --security-opt="no-new-privileges:true" \
-    --net=host \
-    --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
-    --health-interval=30s \
-    --health-retries=3 \
-    -v /etc/passwd:/etc/passwd:ro \
-    -v /home/syncthing/config:/config \
-    -v /home/syncthing/data:/data \
-    -p 127.0.0.1:8384:8384 \
-    -p 22000:22000 \
-    -p 21027:21027/udp \
-    robertbeal/syncthing
-```
+    docker run \
+        --name syncthing \
+        --init \
+        --rm \
+        --read-only \
+        --security-opt="no-new-privileges:true" \
+        --net=host \
+        --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
+        --health-interval=30s \
+        --health-retries=3 \
+        -v /etc/passwd:/etc/passwd:ro \
+        -v /home/syncthing/config:/config \
+        -v /home/syncthing/data:/data \
+        -p 127.0.0.1:8384:8384 \
+        -p 22000:22000 \
+        -p 21027:21027/udp \
+        robertbeal/syncthing
+    ```
 
 1. Using `--user` but without a matching host UID/GID so could cause issues:
 
-```bash
-docker run \
-    --name syncthing \
-    --init \
-    --rm \
-    --read-only \
-    --security-opt="no-new-privileges:true" \
-    --net=host \
-    --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
-    --health-interval=30s \
-    --health-retries=3 \
-    --user $(id foo -u):$(id foo -g) \
-    -v /home/syncthing/config:/config \
-    -v /home/syncthing/data:/data \
-    -p 127.0.0.1:8384:8384 \
-    -p 22000:22000 \
-    -p 21027:21027/udp \
-    robertbeal/syncthing
-```
+    ```bash
+    docker run \
+        --name syncthing \
+        --init \
+        --rm \
+        --read-only \
+        --security-opt="no-new-privileges:true" \
+        --net=host \
+        --health-cmd="curl --fail -H \"X-API-Key: $(cat /root/syncthing-api-key)\" http://127.0.0.1:8384/rest/system/ping || exit 1" \
+        --health-interval=30s \
+        --health-retries=3 \
+        --user $(id foo -u):$(id foo -g) \
+        -v /home/syncthing/config:/config \
+        -v /home/syncthing/data:/data \
+        -p 127.0.0.1:8384:8384 \
+        -p 22000:22000 \
+        -p 21027:21027/udp \
+        robertbeal/syncthing
+    ```
 
 ## Running in writable mode
 
-It is possible to define a UID and GID to the container but `--read-only` won't be possible as it modifies `/etc/passwd`. This is done using `usermod` (via the `shadow` package in alpine):
+It is possible to define a UID and GID to the container but `--read-only` won't be possible as it modifies `/etc/passwd` on start up. This is done using `usermod` (via the `shadow` package in alpine):
 
 ```bash
 docker run \
