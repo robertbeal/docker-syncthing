@@ -8,7 +8,7 @@ update_configs:
           dependency_type: "all"
           update_type: "all"
   - package_manager: "python"
-    directory: "/"
+    directory: "/tests"
     update_schedule: "daily"
     automerged_updates:
       - match:
