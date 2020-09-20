@@ -9,7 +9,7 @@ def host(request):
     # set the working directory to where the Dockerfile lives
     path = os.path.dirname(os.path.abspath(__file__)) + "/../"
 
-    subprocess.check_call(['docker', 'build', '-t', 'syncthing', '.'], cwd=path)
+    subprocess.check_call(['docker', 'buildx', 'build', '-t', 'syncthing', '.'], cwd=path)
     container = subprocess.check_output( ['docker', 'run', '--rm', '-d', 'syncthing'], cwd=path).decode().strip()
 
     yield testinfra.get_host("docker://" + container)
