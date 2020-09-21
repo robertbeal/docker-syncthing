@@ -4,6 +4,8 @@ ARG VERSION=v1.8.0
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
 	curl \
 	g++ \
 	gcc \
@@ -11,10 +13,9 @@ RUN apk add --no-cache \
 	go \
 	tar
 
-WORKDIR /tmp
-
-RUN curl -o ./src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
-RUN tar xf ./src.tar.gz --strip-components=1
+RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
+RUN tar xf /tmp/src.tar.gz --strip-components=1
+RUN cd /tmp
 RUN rm -f go.sum
 RUN go clean -modcache
 RUN CGO_ENABLED=0 go run build.go \
