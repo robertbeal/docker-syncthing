@@ -1,4 +1,4 @@
-FROM alpine:3.12 as builder
+FROM golang:1.15-alpine3.12 as builder
 
 ARG VERSION=v1.8.0
 
@@ -10,7 +10,6 @@ RUN apk add --no-cache \
 	g++ \
 	gcc \
 	git \
-	go \
 	tar
 
 RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
