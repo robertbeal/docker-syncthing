@@ -14,10 +14,10 @@ RUN apk add --no-cache \
 	tar
 
 RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
-RUN  mkdir -p /tmp/src
-RUN tar xf /tmp/src.tar.gz -C /tmp/src --strip-components=1
-# hadolint ignore=DL3003,SC2164
-RUN cd /tmp/src
+RUN mkdir -p /tmp/src
+RUN tar xvf /tmp/src.tar.gz -C /tmp/src --strip=1
+
+WORKDIR /tmp/src
 RUN rm -f go.sum
 RUN go clean -modcache
 RUN CGO_ENABLED=0 go run build.go \
