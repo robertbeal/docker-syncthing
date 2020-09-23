@@ -1,11 +1,9 @@
-FROM golang:1.15-alpine3.12 as builder
+FROM golang:1.14-alpine3.12 as builder
 
 ARG VERSION=v1.8.0
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
-	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-	--repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
 	curl \
 	g++ \
 	gcc \
@@ -53,14 +51,13 @@ COPY --from=builder /tmp/src/syncthing /tmp/entrypoint.sh /usr/bin/
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
     && apk add --no-cache \
-    curl \
     shadow \
     su-exec \
     && chown -R syncthing:syncthing /usr/bin/syncthing /usr/bin/entrypoint.sh \
     && chmod 550 -R /usr/bin/syncthing /usr/bin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/*
 
-HEALTHCHECK --interval=30s --retries=3 CMD curl --fail -H \"X-API-Key: $(cat /root/.syncthing)\" http://127.0.0.1:8384/rest/system/ping || exit 1
+HEALTHCHECK --interval=1m --timeout=10s --retries=3 CMD nc -z 127.0.0.1 8384 || exit 1
 VOLUME /config /data
 EXPOSE 8384 22000 21027/UDP
 
