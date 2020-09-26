@@ -57,7 +57,7 @@ RUN addgroup -g $GID syncthing \
     && chmod 550 -R /usr/bin/syncthing /usr/bin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/*
 
-HEALTHCHECK --interval=1m --timeout=10s --retries=3 CMD nc -z 127.0.0.1 8384 || exit 1
+HEALTHCHECK --start-period=30s --interval=30s --timeout=10s --retries=10 CMD nc -z 127.0.0.1 8384 || exit 1
 VOLUME /config /data
 EXPOSE 8384 22000 21027/UDP
 
