@@ -44,6 +44,7 @@ WORKDIR /tmp
 
 # disable upgrades
 ENV STNOUPGRADE=1
+ENV STGUIADDRESS=0.0.0.0:8384
 
 COPY --from=builder /tmp/src/syncthing /tmp/entrypoint.sh /usr/bin/
 
@@ -57,7 +58,7 @@ RUN addgroup -g $GID syncthing \
     && chmod 550 -R /usr/bin/syncthing /usr/bin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/*
 
-HEALTHCHECK --start-period=1m --interval=1m --timeout=10s --retries=10 CMD nc -z 127.0.0.1 8384 || exit 1
+HEALTHCHECK --interval=1m --timeout=10s CMD nc -z 127.0.0.1 8384 || exit 1
 VOLUME /config /data
 EXPOSE 8384 22000 21027/UDP
 
