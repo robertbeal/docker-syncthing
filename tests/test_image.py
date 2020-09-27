@@ -59,6 +59,7 @@ def test_upgrades_are_disabled(host):
 
 
 @pytest.mark.parametrize('package', [
+    ('curl'),
     ('shadow'),
     ('su-exec'),
 ])
