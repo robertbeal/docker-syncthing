@@ -24,7 +24,7 @@ RUN CGO_ENABLED=0 go run build.go \
 
 COPY entrypoint.sh /tmp
 
-FROM alpine:3.12
+FROM alpine:3.13.0
 
 ARG VERSION
 ARG COMMIT_ID
