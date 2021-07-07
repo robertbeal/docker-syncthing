@@ -15,8 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: lint
-        run: docker run --rm -i hadolint/hadolint "--ignore DL3059 DL3018" < Dockerfile
+      - uses: brpaz/hadolint-action@master
+        with:
+          ignore: DL3059 DL3018
 
   test:
     runs-on: ubuntu-latest
