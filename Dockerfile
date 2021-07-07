@@ -2,7 +2,6 @@ FROM golang:1.14-alpine3.12 as builder
 
 ARG VERSION=v1.8.0
 
-# hadolint ignore=DL3018
 RUN apk add --no-cache \
 	curl \
 	g++ \
@@ -10,13 +9,11 @@ RUN apk add --no-cache \
 	git \
 	tar
 
-# hadolint ignore=DL3059
 RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
 RUN mkdir -p /tmp/src
 RUN tar xvf /tmp/src.tar.gz -C /tmp/src --strip=1
 
 WORKDIR /tmp/src
-# hadolint ignore=DL3059
 RUN rm -f go.sum
 RUN go clean -modcache
 RUN CGO_ENABLED=0 go run build.go \
@@ -49,7 +46,6 @@ ENV STNOUPGRADE=1
 
 COPY --from=builder /tmp/src/syncthing /tmp/entrypoint.sh /usr/bin/
 
-# hadolint ignore=DL3018
 RUN addgroup -g $GID syncthing \
     && adduser -s /bin/false -D -H -G syncthing -u $UID syncthing \
     && apk add --no-cache \
