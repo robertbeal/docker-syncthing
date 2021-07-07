@@ -59,18 +59,18 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:671238a46e4df0f3498d1c3270e5deb9b32d25134c99b7d75370a68cfbe9b634",
-                "sha256:6ad9c7bdf517a808242b998ac20063c41532a570d088d77eec1ee12b0b5574bc"
+                "sha256:50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b",
+                "sha256:91ef2131a9bd6be8f76f1f08eac5c5317221d6ad1e143ae03894b862e8976890"
             ],
             "index": "pypi",
-            "version": "==6.2.3"
+            "version": "==6.2.4"
         },
         "pytest-testinfra": {
             "hashes": [
-                "sha256:f24f41c6453e0e70f361672cabc8358b4ade1f72a1d52870e621f12bf74015e1",
-                "sha256:fbaec729a39c90917895381bee903461be1aa8dcd2f5fff6bc5600c9fe12c795"
+                "sha256:3ee1817983b11f04489141058c2f99018daa26d21bc1bc759b6a22c7938aea55",
+                "sha256:bbd1423b5938435f71be717842969f10d77b7d0e048b655a91e9f21e58a52237"
             ],
-            "version": "==6.2.0"
+            "version": "==6.3.0"
         },
         "testinfra": {
             "hashes": [
