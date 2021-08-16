@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine3.12 as builder
+FROM golang:1.16-alpine3.14 as builder
 
 ARG VERSION=v1.8.0
 
@@ -14,9 +14,11 @@ RUN mkdir -p /tmp/src
 RUN tar xvf /tmp/src.tar.gz -C /tmp/src --strip=1
 
 WORKDIR /tmp/src
-RUN rm -f go.sum
-RUN go clean -modcache
-RUN CGO_ENABLED=0 go run build.go \
+
+ENV CGO_ENABLED=0
+ENV BUILD_HOST=syncthing.net
+ENV BUILD_USER=docker
+RUN go run build.go \
 	-no-upgrade \
 	-version=$VERSION \
 	build syncthing
