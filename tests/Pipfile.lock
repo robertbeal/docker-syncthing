@@ -64,19 +64,19 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:42901e6bd4bd4a0e533358a86e848427a49005a3256f657c5c8f8dd35ef137a9",
-                "sha256:dad48ffda394e5ad9aa3b7d7ddf339ed502e5e365b1350e0af65f4a602344b11"
+                "sha256:9ce3ff477af913ecf6321fe337b93a2c0dcf2a0a1439c43f5452112c1e4280db",
+                "sha256:e30905a0c131d3d94b89624a1cc5afec3e0ba2fbdb151867d8e0ebd49850f171"
             ],
             "index": "pypi",
-            "version": "==7.0.0"
+            "version": "==7.0.1"
         },
         "pytest-testinfra": {
             "hashes": [
-                "sha256:4936f946b26e60f2fe5efaba90c28ab77dcbbf460dae87b17f7e2c434bdb3b7a",
-                "sha256:724df78576ca6a9fc82f2eba5575505f0556a10d615d870014ec30b258e997c8"
+                "sha256:3aac5453a8b0e61b00539d8560442e862ce04ce1e31d08fd44500a4e43d3a989",
+                "sha256:c2c0af72e51d84f72306045b551a91ac8a2cef2ca1fa87636ee64ceaa0f219c5"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==6.5.0"
+            "version": "==6.6.0"
         },
         "testinfra": {
             "hashes": [
@@ -88,11 +88,11 @@
         },
         "tomli": {
             "hashes": [
-                "sha256:b5bde28da1fed24b9bd1d4d2b8cba62300bfb4ec9a6187a957e8ddb9434c5224",
-                "sha256:c292c34f58502a1eb2bbb9f5bbc9a5ebc37bee10ffb8c2d6bbdfa8eb13cc14e1"
+                "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+                "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.0.0"
+            "version": "==2.0.1"
         }
     }
 }
