@@ -3,7 +3,6 @@
 [![](https://images.microbadger.com/badges/version/robertbeal/syncthing.svg)](https://microbadger.com/images/robertbeal/syncthing "Get your own version badge on microbadger.com")
 [![](https://img.shields.io/docker/pulls/robertbeal/syncthing.svg)](https://hub.docker.com/r/robertbeal/syncthing/)
 [![](https://img.shields.io/docker/stars/robertbeal/syncthing.svg)](https://hub.docker.com/r/robertbeal/syncthing/)
-[![](https://img.shields.io/docker/automated/robertbeal/syncthing.svg)](https://hub.docker.com/r/robertbeal/syncthing/)
 
 # Syncthing
 
