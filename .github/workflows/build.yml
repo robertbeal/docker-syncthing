@@ -44,7 +44,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: variables
-        run: curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
+        run: |
+          curl --silent https://api.github.com/repos/syncthing/syncthing/releases/latest | jq -r '.tag_name' > version
+          cat version
 
       - name: build dependencies
         uses: crazy-max/ghaction-docker-buildx@v3
