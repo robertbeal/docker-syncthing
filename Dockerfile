@@ -17,6 +17,7 @@ WORKDIR /tmp/src
 ENV CGO_ENABLED=0
 ENV BUILD_HOST=syncthing.net
 ENV BUILD_USER=docker
+RUN go mod download github.com/yuin/goldmark
 RUN go run build.go -no-upgrade build syncthing
 
 COPY entrypoint.sh /tmp
