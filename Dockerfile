@@ -11,9 +11,10 @@ RUN apk add --no-cache \
 
 RUN curl -o /tmp/src.tar.gz -L "https://github.com/syncthing/syncthing/archive/$VERSION.tar.gz"
 RUN mkdir -p /tmp/src
-RUN tar xvf /tmp/src.tar.gz -C /tmp/src --strip=1
+RUN tar xvf /tmp/src.tar.gz -C /tmp/src --strip-components=1
 
 WORKDIR /tmp/src
+RUN go clean -modcache
 ENV CGO_ENABLED=0
 ENV BUILD_HOST=syncthing.net
 ENV BUILD_USER=docker
