@@ -22,7 +22,7 @@ RUN go run build.go -no-upgrade build syncthing
 
 COPY entrypoint.sh /tmp
 
-FROM alpine:3.16.0
+FROM alpine:3.16.1
 
 ARG VERSION
 ARG COMMIT_ID
