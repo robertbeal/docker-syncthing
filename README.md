@@ -6,6 +6,8 @@
 
 # Syncthing
 
+**ARCHIVED** as I now use LinuxServer's Syncthing image so don't maintain this
+
 A production optimised version of Syncthing, able to run in `--read-only` mode and use `su-exec` for managing the user it runs as. Supported architectures can be seen on [Docker Hub](https://hub.docker.com/repository/docker/robertbeal/syncthing). 
 
 ## Running in read-only mode
